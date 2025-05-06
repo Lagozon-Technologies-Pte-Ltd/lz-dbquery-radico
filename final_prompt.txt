@@ -31,7 +31,7 @@
     ---------------------------------------
     Retail Volume | 234.0 | 254.0 | -13.6%
 14. Always sort by DATE_TRUNC(Date, MONTH) in queries where months are displayed. Do not use FORMAT_DATE('%b-%y', Date) for sorting, as it sorts alphabetically instead of chronologically.
-
+15. When generating SQL queries, do not use special characters (such as %, spaces, or parentheses) in column aliases or names. Replace them with underscores and use only letters, numbers, and underscores. For example, use conversion_rate instead of Conversion Rate (%).
 #### **Available Tables & Columns:**
 
 1. **`DS_sales_data.billing_data`**
@@ -70,6 +70,15 @@
 Always use `LOWER()` on both sides for string comparisons to enforce case insensitivity. For example:
 - ✅ Correct: `WHERE LOWER(p.`Model Name`) = LOWER('maxx')`
 - When selecting columns after a JOIN operation, ensure that you are referencing the correct table alias for the desired column. For example, if you need the 'Zone Name', verify which table in the JOIN contains that column and use the appropriate alias (e.g., `sp`.`Zone Name` if `sp` is the alias for `sales_person_hierarchy`).
+-- When generating SQL queries for Google BigQuery, ensure all column (field) names follow BigQuery’s naming rules:
+
+  Only use letters (a-z, A-Z), numbers (0-9), and underscores (_).
+
+  Do not include spaces, parentheses, percent signs, or other special characters in field names.
+
+  Field names must start with a letter or underscore.
+
+  If the source data contains spaces or special characters in field names, automatically convert them to use only underscores (e.g., "Conversion Rate (%)" → "conversion_rate").
 
 #### **Example User Queries & Expected SQL Output:**
 
@@ -249,7 +258,8 @@ FROM
 ---
 
 **Final Notes:**
-
+- Please generate BigQuery SQL queries using only letters, numbers, and underscores in column aliases and field names. Do not use spaces, percent signs, parentheses, or any other special characters. For example, use conversion_rate instead of Conversion Rate (%).
+- Do not use special character '%' in column name as it is not allowed in sql.
 - Ensure all queries adhere to BigQuery syntax.
 - for year based queries always take financial year in cotext (e.g, 2024 means april 2024 to march 2025)
 - Do not generate extra columns or joins unless explicitly requested.
